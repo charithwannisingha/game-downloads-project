@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.apiRouter = void 0;
+const express_1 = require("express");
+const auth_1 = require("./auth");
+const games_1 = require("./games");
+const comments_1 = require("./comments");
+const download_1 = require("./download");
+const users_1 = require("./users");
+const admin_1 = require("./admin");
+exports.apiRouter = (0, express_1.Router)();
+exports.apiRouter.use("/auth", auth_1.authRouter);
+exports.apiRouter.use("/games", games_1.gamesRouter);
+exports.apiRouter.use("/comments", comments_1.commentsRouter);
+exports.apiRouter.use("/download", download_1.downloadRouter);
+exports.apiRouter.use("/users", users_1.usersRouter);
+exports.apiRouter.use("/admin", admin_1.adminRouter);

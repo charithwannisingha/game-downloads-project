@@ -1,0 +1,121 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { backendUrl } from "@/src/lib/backend";
+
+const schema = z.object({
+  username: z.string().min(3).max(30),
+  email: z.string().email(),
+  password: z.string().min(8).max(72),
+});
+
+type FormValues = z.infer<typeof schema>;
+
+export default function RegisterPage() {
+  const router = useRouter();
+  const [next, setNext] = useState("/dashboard");
+
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("next");
+    if (typeof v === "string" && v.trim().length) setNext(v);
+  }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  });
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onSubmit(values: FormValues) {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch(backendUrl(`/api/auth/register`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || "Register failed");
+      }
+      // Auto-login after register would be nicer; for now ask user to login.
+      router.push(`/login?next=${encodeURIComponent(next)}`);
+    } catch (e: any) {
+      setError(e?.message ?? "Register failed");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <main className="mx-auto w-full max-w-md px-4 py-10">
+      <div className="glass neon-border rounded-3xl p-6">
+        <h1 className="text-xl font-black tracking-tight">Create account</h1>
+        <p className="mt-1 text-sm text-[color:var(--muted)]">Start downloading with secure JWT tokens.</p>
+
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-1">
+            <label className="text-sm text-[color:var(--muted)]">Username</label>
+            <input
+              {...register("username")}
+              className="w-full rounded-xl border border-[color:var(--border)] bg-[rgba(2,6,23,0.25)] px-3 py-2 outline-none"
+              autoComplete="username"
+            />
+            {errors.username ? <div className="text-xs text-red-400">{errors.username.message}</div> : null}
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm text-[color:var(--muted)]">Email</label>
+            <input
+              {...register("email")}
+              type="email"
+              className="w-full rounded-xl border border-[color:var(--border)] bg-[rgba(2,6,23,0.25)] px-3 py-2 outline-none"
+              autoComplete="email"
+            />
+            {errors.email ? <div className="text-xs text-red-400">{errors.email.message}</div> : null}
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm text-[color:var(--muted)]">Password</label>
+            <input
+              {...register("password")}
+              type="password"
+              className="w-full rounded-xl border border-[color:var(--border)] bg-[rgba(2,6,23,0.25)] px-3 py-2 outline-none"
+              autoComplete="new-password"
+            />
+            {errors.password ? <div className="text-xs text-red-400">{errors.password.message}</div> : null}
+          </div>
+
+          {error ? <div className="rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-200">{error}</div> : null}
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="neon-border glass w-full rounded-2xl px-4 py-3 font-semibold transition hover:brightness-110 disabled:opacity-70"
+          >
+            {submitting ? "Creating..." : "Create account"}
+          </button>
+        </form>
+
+        <div className="mt-4 text-sm text-[color:var(--muted)]">
+          Already have an account?{" "}
+          <a href={`/login?next=${encodeURIComponent(next)}`} className="text-neon hover:brightness-110">
+            Login
+          </a>
+        </div>
+      </div>
+    </main>
+  );
+}
+

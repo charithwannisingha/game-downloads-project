@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #05060a;
+  --fg: #e5e7eb;
+  --muted: rgba(226, 232, 240, 0.7);
+  --card: rgba(15, 23, 42, 0.7);
+  --border: rgba(148, 163, 184, 0.25);
+  --shadow: rgba(0, 0, 0, 0.55);
+  --accent: #22d3ee; /* neon-cyan */
+  --accent2: #a78bfa; /* neon-violet */
+}
+
+/* 🔥 මෙතන Light Mode එකේ පාටවල් Dark Mode එකේ ඒවටම සමාන කළා */
+:root[data-theme="light"] {
+  --bg: #05060a;
+  --fg: #e5e7eb;
+  --muted: rgba(226, 232, 240, 0.7);
+  --card: rgba(15, 23, 42, 0.7);
+  --border: rgba(148, 163, 184, 0.25);
+  --shadow: rgba(0, 0, 0, 0.55);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Glassmorphism helpers */
+.glass {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 60px var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.neon-border {
+  border: 1px solid rgba(34, 211, 238, 0.25);
+}
+
+.text-neon {
+  color: var(--accent);
+}
