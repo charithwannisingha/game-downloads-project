@@ -1,4 +1,4 @@
-# NeonPC Games Downloads (Next.js + Express + MySQL + Telegram)
+# WC PC Games Downloads (Next.js + Express + MySQL + Telegram)
  <img width="1366" height="949" alt="jijijop" src="https://github.com/user-attachments/assets/f02376b8-3e43-434e-8f62-235b04f0dfce" />
 
 
