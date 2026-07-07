@@ -1,4 +1,8 @@
-# NeonPC Downloads (Next.js + Express + MySQL + Telegram)
+ NeonPC Games Downloads (Next.js + Express + MySQL + Telegram)
+ <img width="1366" height="949" alt="jijijop" src="https://github.com/user-attachments/assets/f02376b8-3e43-434e-8f62-235b04f0dfce" />
+
+
+
 
 World-class PC game downloading platform with:
 JWT auth, Telegram-based secure download links (expiring tokens), comments w/ nested replies, ratings, follows, wishlist, and an admin panel to manage games + Telegram download links.
